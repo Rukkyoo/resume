@@ -1,0 +1,83 @@
+'use client';
+
+import Link from 'next/link';
+import { landingNavItems } from '@/config/navigation';
+import { ROUTES } from '@/lib/constants';
+
+export function LandingNavbar() {
+  return (
+    <header
+      className="w-full relative z-50 transition-colors"
+      style={{
+        background: '#ccdd9b',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '2px solid #1d1a05',
+      }}
+    >
+      <div className="container-app">
+        <nav
+          className="flex items-center justify-between"
+          style={{ height: '64px' }}
+          aria-label="Main navigation"
+        >
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-bold text-base tracking-tight"
+            style={{ color: '#1d1a05', fontFamily: 'var(--font-display)' }}
+          >
+            <span
+              className="flex items-center justify-center w-8 h-8 rounded-lg text-sm font-black border border-[#1d1a05] shadow-[2px_2px_0px_#1d1a05]"
+              style={{
+                background: '#ca3c25',
+                color: '#ffffff',
+              }}
+            >
+              R
+            </span>
+            ResumeAI
+          </Link>
+
+          {/* Desktop Nav Links */}
+          <ul className="hidden md:flex items-center gap-1" role="list">
+            {landingNavItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+                  style={{ color: '#1d1a05' }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255, 251, 189, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA Buttons */}
+          <div className="flex items-center gap-3">
+            <Link
+              href={ROUTES.signIn}
+              className="hidden md:inline-flex px-4 py-2 text-sm font-semibold rounded-lg text-[#1d1a05] hover:bg-[#fffbbd]/40 transition-colors"
+            >
+              Login
+            </Link>
+            <Link
+              href={ROUTES.signUp}
+              className="btn btn-primary bg-[#ca3c25] hover:bg-[#b3311c] text-white border border-[#1d1a05] shadow-[2.5px_2.5px_0px_#1d1a05] active:translate-x-[1px] active:translate-y-[1px]"
+              style={{ padding: '0.45rem 1.15rem', fontSize: '14px', fontWeight: 700 }}
+            >
+              Get Started
+            </Link>
+          </div>
+        </nav>
+      </div>
+    </header>
+  );
+}

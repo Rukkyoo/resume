@@ -15,7 +15,7 @@ export const siteConfig = {
     { label: 'LinkedIn', href: 'https://linkedin.com/in/michael-omonedo', icon: 'linkedin' },
   ],
   contact: {
-    email: 'hello@resumeai.app',
+    email: 'mkrkyooo@gmail.com',
   },
 } as const;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { CgNotes } from 'react-icons/cg';
@@ -10,7 +10,7 @@ import { Card } from '@/components/lightswind/card';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/lightswind/form';
 import { Textarea } from '@/components/lightswind/textarea';
 import { Button } from '@/components/lightswind/button';
-import { LandingNavbar } from "@/components/landing/LandingNavbar"
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface ResumeTailorFormData {
   resumeFile: File | null;
@@ -24,7 +24,23 @@ export function LandingHero() {
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const words = [
+    "a Moment",
+    "an Instant",
+    "a Flash",
+    "a Second",
+    "no Time",
+    "a Jiffy"
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % words.length);
+    }, 3000)
+    return () => clearInterval(interval);
+  }, [])
 
   const form = useForm<ResumeTailorFormData>({
     defaultValues: {
@@ -96,7 +112,17 @@ export function LandingHero() {
               style={{ color: '#1d1a05', maxWidth: '520px' }}
             >
               Tailor Your Resume for Every Job in{' '}
-              <span style={{ color: '#ca3c25' }}>Seconds</span>
+              <span style={{ color: '#ca3c25' }}><AnimatePresence mode="wait">
+                <motion.span
+                  key={words[currentWordIndex]}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.7 }}
+                >
+                  {words[currentWordIndex]}
+                </motion.span>
+              </AnimatePresence></span>
             </h1>
 
             {/* Subtext */}
@@ -104,8 +130,59 @@ export function LandingHero() {
               className="text-body-lg text-center md:text-left mx-auto md:mx-0 font-medium"
               style={{ color: '#4d461a', maxWidth: '440px' }}
             >
-              Our AI analyzes job descriptions, highlights your relevant skills with surgical
-              precision, and generates a tailored resume in seconds.
+              Our AI <motion.span
+                  initial={{
+                    backgroundSize: "0% 100%",
+                    backgroundPosition: "left",
+                    backgroundRepeat: "no-repeat",
+                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
+                    color: "black",
+                    padding: "4px",
+                    fontWeight: "bold",
+                  }}
+                  animate={{
+                    backgroundSize: "100% 100%",
+                    color: "white",
+                  }}
+                  transition={{
+                    duration: 0.8,
+                  }}
+                >analyzes</motion.span> job descriptions, <motion.span
+                  initial={{
+                    backgroundSize: "0% 100%",
+                    backgroundPosition: "left",
+                    backgroundRepeat: "no-repeat",
+                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
+                    color: "black",
+                    padding: "4px",
+                    fontWeight: "bold",
+                  }}
+                  animate={{
+                    backgroundSize: "100% 100%",
+                    color: "white",
+                  }}
+                  transition={{
+                    duration: 1.0,
+                  }}
+                >highlights</motion.span> your relevant skills with surgical
+              precision, and <motion.span
+                  initial={{
+                    backgroundSize: "0% 100%",
+                    backgroundPosition: "left",
+                    backgroundRepeat: "no-repeat",
+                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
+                    color: "black",
+                    padding: "4px",
+                    fontWeight: "bold",
+                  }}
+                  animate={{
+                    backgroundSize: "100% 100%",
+                    color: "white",
+                  }}
+                  transition={{
+                    duration: 1.2,
+                  }}
+                >generates</motion.span> a tailored resume in seconds.
             </p>
 
             {/* CTA row */}

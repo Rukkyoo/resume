@@ -7,7 +7,7 @@ export type NavItem = {
 export const landingNavItems: NavItem[] = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Features', href: '#features' },
-  { label: 'Pricing', href: '/pricing' },
+  { label: 'Live Demo', href: '#demo' },
 ];
 
 export const footerNav = {

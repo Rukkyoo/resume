@@ -83,11 +83,11 @@ export function LandingHero() {
     <section
       className="relative overflow-hidden"
       aria-labelledby="hero-headline"
-      style={{ background: '#fffbbd' }}
+      style={{ background: '#f1faee' }}
     >
 
       {/* Grid background */}
-      <div className="absolute inset-0 bg-grid-pattern bg-[#7fb069] opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 bg-grid-pattern bg-[#a8dadc] opacity-40 pointer-events-none" />
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
       />
@@ -98,7 +98,7 @@ export function LandingHero() {
             {/* Label chip */}
             <div className="flex items-center justify-center md:justify-start gap-2">
               <span
-                className="badge badge-success bg-[#7fb069] text-[#1d1a05] border border-[#1d1a05]"
+                className="badge badge-success bg-[#a8dadc] text-[#1d3557] border border-[#1d3557]"
                 style={{ padding: '0.35rem 0.85rem' }}
               >
                 ✦ AI-powered
@@ -109,10 +109,10 @@ export function LandingHero() {
             <h1
               id="hero-headline"
               className="text-display-lg text-center md:text-left mx-auto md:mx-0 font-bold"
-              style={{ color: '#1d1a05', maxWidth: '520px' }}
+              style={{ color: '#1d3557', maxWidth: '520px' }}
             >
               Tailor Your Resume for Every Job in{' '}
-              <span style={{ color: '#ca3c25' }}><AnimatePresence mode="wait">
+              <span style={{ color: '#e63946' }}><AnimatePresence mode="wait">
                 <motion.span
                   key={words[currentWordIndex]}
                   initial={{ opacity: 0, y: 15 }}
@@ -128,15 +128,15 @@ export function LandingHero() {
             {/* Subtext */}
             <p
               className="text-body-lg text-center md:text-left mx-auto md:mx-0 font-medium"
-              style={{ color: '#4d461a', maxWidth: '440px' }}
+              style={{ color: '#457b9d', maxWidth: '440px' }}
             >
               Our AI <motion.span
                   initial={{
                     backgroundSize: "0% 100%",
                     backgroundPosition: "left",
                     backgroundRepeat: "no-repeat",
-                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
-                    color: "black",
+                    backgroundImage: "linear-gradient(to right, #e63946 0%, #e63946 100%)",
+                    color: "#1d3557",
                     padding: "4px",
                     fontWeight: "bold",
                   }}
@@ -152,8 +152,8 @@ export function LandingHero() {
                     backgroundSize: "0% 100%",
                     backgroundPosition: "left",
                     backgroundRepeat: "no-repeat",
-                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
-                    color: "black",
+                    backgroundImage: "linear-gradient(to right, #e63946 0%, #e63946 100%)",
+                    color: "#1d3557",
                     padding: "4px",
                     fontWeight: "bold",
                   }}
@@ -170,8 +170,8 @@ export function LandingHero() {
                     backgroundSize: "0% 100%",
                     backgroundPosition: "left",
                     backgroundRepeat: "no-repeat",
-                    backgroundImage: "linear-gradient(to right, #ca3c25 0%, #ca3c25 100%)",
-                    color: "black",
+                    backgroundImage: "linear-gradient(to right, #e63946 0%, #e63946 100%)",
+                    color: "#1d3557",
                     padding: "4px",
                     fontWeight: "bold",
                   }}
@@ -189,14 +189,14 @@ export function LandingHero() {
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start w-full sm:w-auto">
               <Link
                 href={ROUTES.signUp}
-                className="btn btn-primary bg-[#ca3c25] hover:bg-[#b3311c] text-white border border-[#1d1a05] shadow-[3px_3px_0px_#1d1a05] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d1a05] w-full sm:w-auto"
+                className="btn btn-primary bg-[#e63946] hover:bg-[#d32f3c] text-white border border-[#1d3557] shadow-[3px_3px_0px_#1d3557] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d3557] w-full sm:w-auto"
                 style={{ padding: '0.75rem 1.75rem' }}
               >
                 Try for Free
               </Link>
               <Link
                 href="#demo"
-                className="btn btn-secondary bg-[#e6aa68] hover:bg-[#d89955] text-[#1d1a05] border border-[#1d1a05] shadow-[3px_3px_0px_#1d1a05] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d1a05] w-full sm:w-auto"
+                className="btn btn-secondary bg-[#457b9d] hover:bg-[#3a6a89] text-white border border-[#1d3557] shadow-[3px_3px_0px_#1d3557] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d3557] w-full sm:w-auto"
                 style={{ padding: '0.75rem 1.5rem' }}
               >
                 See it in Action →
@@ -205,7 +205,7 @@ export function LandingHero() {
           </div>
 
           <div className="w-full max-w-lg mx-auto lg:max-w-none">
-            <Card className="card-surface p-6 flex flex-col gap-4 bg-[#fffbbd] border border-[#1d1a05] rounded-xl shadow-[4px_4px_0px_#1d1a05]">
+            <Card className="card-surface p-6 flex flex-col gap-4 bg-[#f1faee] border border-[#1d3557] rounded-xl shadow-[4px_4px_0px_#1d3557]">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
                   {/* Drop zone field */}
@@ -214,7 +214,7 @@ export function LandingHero() {
                     name="resumeFile"
                     render={() => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-label-sm text-left block text-[#1d1a05] font-bold tracking-wider">
+                        <FormLabel className="text-label-sm text-left block text-[#1d3557] font-bold tracking-wider">
                           Upload Resume
                         </FormLabel>
                         <FormControl>
@@ -232,8 +232,8 @@ export function LandingHero() {
                               if (file) handleFileSelect(file);
                             }}
                             className={`relative rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-3 py-8 px-4 cursor-pointer transition-all duration-200 ${isDragging
-                              ? 'border-[#ca3c25] bg-[#ca3c25]/10 scale-[1.01]'
-                              : 'border-[#1d1a05] bg-[#fffef0] hover:border-[#ca3c25] hover:bg-[#7fb069]/10'
+                              ? 'border-[#e63946] bg-[#e63946]/10 scale-[1.01]'
+                              : 'border-[#1d3557] bg-[#f8fdf6] hover:border-[#e63946] hover:bg-[#a8dadc]/10'
                               }`}
                           >
                             <input
@@ -248,22 +248,22 @@ export function LandingHero() {
                             />
 
                             {selectedFile ? (
-                              <div className="flex items-center gap-3 w-full p-2.5 bg-[#fffbbd] rounded-lg border border-[#1d1a05] shadow-[2px_2px_0px_#1d1a05]">
-                                <div className="w-9 h-9 rounded-lg bg-[#ca3c25]/15 text-[#ca3c25] flex items-center justify-center shrink-0 border border-[#1d1a05]">
+                              <div className="flex items-center gap-3 w-full p-2.5 bg-[#f1faee] rounded-lg border border-[#1d3557] shadow-[2px_2px_0px_#1d3557]">
+                                <div className="w-9 h-9 rounded-lg bg-[#e63946]/15 text-[#e63946] flex items-center justify-center shrink-0 border border-[#1d3557]">
                                   <FileText className="w-5 h-5" />
                                 </div>
                                 <div className="flex flex-col min-w-0 flex-1 text-left">
-                                  <span className="text-sm font-semibold truncate text-[#1d1a05]">
+                                  <span className="text-sm font-semibold truncate text-[#1d3557]">
                                     {selectedFile.name}
                                   </span>
-                                  <span className="text-xs text-[#4d461a] font-medium">
+                                  <span className="text-xs text-[#457b9d] font-medium">
                                     {(selectedFile.size / 1024).toFixed(1)} KB
                                   </span>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={handleRemoveFile}
-                                  className="p-1 rounded-md hover:bg-[#ca3c25]/20 text-[#1d1a05] transition-colors"
+                                  className="p-1 rounded-md hover:bg-[#e63946]/20 text-[#1d3557] transition-colors"
                                   title="Remove file"
                                 >
                                   <X className="w-4 h-4" />
@@ -272,15 +272,15 @@ export function LandingHero() {
                             ) : (
                               <>
                                 <div
-                                  className="w-10 h-10 rounded-full flex items-center justify-center text-xl text-[#1d1a05] border border-[#1d1a05]"
-                                  style={{ background: '#7fb069' }}
+                                  className="w-10 h-10 rounded-full flex items-center justify-center text-xl text-[#1d3557] border border-[#1d3557]"
+                                  style={{ background: '#a8dadc' }}
                                 >
                                   <CgNotes />
                                 </div>
-                                <p className="text-body-md text-center text-[#1d1a05] font-medium">
-                                  Drop your resume here, or <span className="text-[#ca3c25] font-bold underline">browse</span>
+                                <p className="text-body-md text-center text-[#1d3557] font-medium">
+                                  Drop your resume here, or <span className="text-[#e63946] font-bold underline">browse</span>
                                 </p>
-                                <span className="text-label-sm text-[#4d461a] font-medium">
+                                <span className="text-label-sm text-[#457b9d] font-medium">
                                   PDF, DOCX, TXT up to 5MB
                                 </span>
                               </>
@@ -298,13 +298,13 @@ export function LandingHero() {
                     name="jobDescription"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-label-sm text-left block text-[#1d1a05] font-bold tracking-wider">
+                        <FormLabel className="text-label-sm text-left block text-[#1d3557] font-bold tracking-wider">
                           Job description
                         </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Paste the job description here..."
-                            className="h-20 min-h-[80px] resize-none rounded-lg text-sm bg-[#fffef0] text-[#1d1a05] border-[#1d1a05] focus:border-[#ca3c25] placeholder:text-[#4d461a]"
+                            className="h-20 min-h-[80px] resize-none rounded-lg text-sm bg-[#f8fdf6] text-[#1d3557] border-[#1d3557] focus:border-[#e63946] placeholder:text-[#457b9d]"
                             {...field}
                           />
                         </FormControl>
@@ -317,7 +317,7 @@ export function LandingHero() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-11 bg-[#ca3c25] hover:bg-[#b3311c] text-white border border-[#1d1a05] shadow-[3px_3px_0px_#1d1a05] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d1a05] rounded-lg font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    className="w-full h-11 bg-[#e63946] hover:bg-[#d32f3c] text-white border border-[#1d3557] shadow-[3px_3px_0px_#1d3557] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#1d3557] rounded-lg font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>

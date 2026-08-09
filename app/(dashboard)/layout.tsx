@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { authOptions } from '@/lib/auth';
+import { ROUTES } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: {
@@ -9,14 +13,20 @@ export const metadata: Metadata = {
 
 /**
  * Dashboard route group layout.
- * Add DashboardSidebar + DashboardNavbar here when building the dashboard UI.
- * Never import landing components here.
+ * Protects all /dashboard routes — unauthenticated users are
+ * redirected to the sign-in page.
  */
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect(ROUTES.signIn);
+  }
+
   return (
     <div className="flex min-h-dvh" style={{ background: 'var(--color-surface-container-low)' }}>
       {/* DashboardSidebar will go here */}

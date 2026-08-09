@@ -1,18 +1,24 @@
-import type { User } from '@/types';
+import type { NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET || '',
+    }),
+  ],
+  pages: {
+    signIn: '/sign-in',
+  },
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        (session.user as any).id = token.sub;
+      }
+      return session;
+    },
+  },
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+};
 
-export async function getSession(): Promise<User | null> {
-  // TODO: Implement with your auth provider
-  // e.g., return await getServerSession(authOptions);
-  return null;
-}
-
-export async function isAuthenticated(): Promise<boolean> {
-  const session = await getSession();
-  return session !== null;
-}
-
-export async function getUserRole(): Promise<User['role']> {
-  const session = await getSession();
-  return session?.role ?? 'guest';
-}

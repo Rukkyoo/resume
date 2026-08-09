@@ -3,7 +3,7 @@ import { Providers } from '@/components/providers';
 import './globals.css';
 
 export const viewport: Viewport = {
-  themeColor: '#006c49',
+  themeColor: '#1d3557',
   width: 'device-width',
   initialScale: 1,
 };
@@ -51,8 +51,8 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className="min-h-dvh flex flex-col antialiased bg-slate-100">
-        <div className="flex-1 flex flex-col bg-[var(--color-surface-tint)] w-full lg:px-24 py-4 md:p-8 border border-slate-200 overflow-hidden">
+      <body className="min-h-dvh flex flex-col antialiased bg-[#dceedd]">
+        <div className="flex-1 flex flex-col bg-[#1d4557] w-full lg:px-24 py-4 md:p-8 border border-[#c0debb] overflow-hidden">
           <Providers>{children}</Providers>
         </div>
       </body>

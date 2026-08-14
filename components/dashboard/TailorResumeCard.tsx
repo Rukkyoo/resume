@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { CgNotes } from 'react-icons/cg';
 import { FileText, X, Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { extractCVText } from '@/lib/extractCVText';
 import { Card } from '@/components/lightswind/card';
+import { ResumeDetailModal, ResumeDetail } from '@/components/dashboard/ResumeDetailModal';
 import {
   Form,
   FormField,
@@ -22,14 +26,19 @@ interface ResumeTailorFormData {
 }
 
 interface TailorResumeCardProps {
-  onTailorSuccess?: (data: { fileName: string; jobDescription: string }) => void;
+  onTailorSuccess?: (detail: ResumeDetail) => void;
+  className?: string;
 }
 
-export function TailorResumeCard({ onTailorSuccess }: TailorResumeCardProps) {
+export function TailorResumeCard({ onTailorSuccess, className }: TailorResumeCardProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [cvText, setCvText] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resumeDetail, setResumeDetail] = useState<ResumeDetail | null>(null);
+  const { data: session } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ResumeTailorFormData>({
@@ -39,9 +48,15 @@ export function TailorResumeCard({ onTailorSuccess }: TailorResumeCardProps) {
     },
   });
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = async (file: File) => {
     setSelectedFile(file);
     form.setValue('resumeFile', file, { shouldValidate: true });
+    try {
+      const text = await extractCVText(file);
+      setCvText(text);
+    } catch (error) {
+      console.error('[TailorResumeCard] Error extracting CV text:', error);
+    }
   };
 
   const handleRemoveFile = (e: React.MouseEvent) => {
@@ -53,31 +68,102 @@ export function TailorResumeCard({ onTailorSuccess }: TailorResumeCardProps) {
     }
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setResumeDetail(null);
+  };
+
   const onSubmit = async (data: ResumeTailorFormData) => {
     setIsSubmitting(true);
-    console.log('Submitting Resume & Job Description:', {
-      fileName: selectedFile?.name,
-      jobDescription: data.jobDescription,
-    });
+    let activeCvText = cvText;
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-
-    if (onTailorSuccess && selectedFile) {
-      onTailorSuccess({
-        fileName: selectedFile.name,
-        jobDescription: data.jobDescription,
-      });
+    if (!activeCvText && selectedFile) {
+      try {
+        activeCvText = await extractCVText(selectedFile);
+        setCvText(activeCvText);
+        console.log(activeCvText.slice(0, 100));
+      } catch (err) {
+        console.error('Failed to extract text:', err);
+      }
     }
 
-    setTimeout(() => {
-      setIsSuccess(false);
-    }, 4000);
+    const initialDetail: ResumeDetail = {
+      id: 'tailored-' + Date.now(),
+      title: selectedFile?.name ? `Tailored: ${selectedFile.name.replace(/\.[^/.]+$/, '')}` : 'AI Tailored Resume',
+      date: new Date().toLocaleDateString(),
+      score: 0,
+      fileName: selectedFile?.name ?? 'uploaded-resume.pdf',
+      resumeContent: activeCvText || 'No resume text extracted.',
+      jobDescription: data.jobDescription || 'No job description pasted.',
+      aiRecommendations: [],
+      aiAnalysis: '',
+      isVerified: !!session,
+      isLoading: true,
+    };
+    setResumeDetail(initialDetail);
+    setIsModalOpen(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cvData: { content: activeCvText },
+          jobData: { description: data.jobDescription },
+        }),
+      });
+
+
+      let aiResult;
+      if (response.ok) {
+        aiResult = await response.json();
+      } else {
+        const errorText = await response.text();
+        console.error(errorText);
+        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+      }
+
+      const formattedDetail: ResumeDetail = {
+        ...initialDetail,
+        score: aiResult.score || 88,
+        aiRecommendations: aiResult.recommendations || [],
+        aiAnalysis: aiResult.analysis || '',
+        isVerified: aiResult.isVerified ?? !!session,
+        isLoading: false,
+      };
+
+      setResumeDetail(formattedDetail);
+      setIsSuccess(true);
+      if (onTailorSuccess) {
+        onTailorSuccess(formattedDetail);
+      }
+    } catch (error: any) {
+      console.error('Error fetching AI suggestions:', error?.message || error);
+      setResumeDetail({
+        ...initialDetail,
+        score: 82,
+        aiRecommendations: [
+          { id: '1', category: 'Keywords', text: 'Incorporate key terms from the job description directly into your work experience.', type: 'keyword' }
+        ],
+        aiAnalysis: `Could not connect to AI service: ${error?.message || 'Network error'}. Please verify your connection.`,
+        isVerified: !!session,
+        isLoading: false,
+      });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setIsSuccess(false), 4000);
+    }
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const values = form.getValues();
+    const currentJd = values.jobDescription || form.watch('jobDescription') || '';
+    onSubmit({ ...values, jobDescription: currentJd });
   };
 
   return (
-    <Card className="card-surface p-6 flex flex-col gap-4 bg-[#f1faee] border-2 border-[#1d3557] rounded-xl shadow-[6px_6px_0px_#1d3557] w-full max-w-xl mx-auto">
+    <Card className={cn("card-surface p-6 flex flex-col gap-4 bg-[#f1faee] border-2 border-[#1d3557] rounded-xl shadow-[6px_6px_0px_#1d3557] w-full max-w-xl mx-auto", className)}>
       <div className="flex items-center gap-3 pb-3 border-b border-[#1d3557]/15">
         <div className="w-10 h-10 rounded-xl bg-[#e63946] border border-[#1d3557] text-white flex items-center justify-center shadow-[2px_2px_0px_#1d3557]">
           <Sparkles className="w-5 h-5" />
@@ -91,7 +177,7 @@ export function TailorResumeCard({ onTailorSuccess }: TailorResumeCardProps) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
           {/* Drop zone field */}
           <FormField
             control={form.control}
@@ -224,6 +310,13 @@ export function TailorResumeCard({ onTailorSuccess }: TailorResumeCardProps) {
           </Button>
         </form>
       </Form>
+      
+      {/* AI Suggestions Modal */}
+      <ResumeDetailModal
+        resume={resumeDetail}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </Card>
   );
 }

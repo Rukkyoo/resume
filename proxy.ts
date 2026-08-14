@@ -10,7 +10,9 @@ export async function proxy(request: NextRequest) {
   // Skip static assets and API routes
   if (
     pathname.startsWith('/api') ||
-    pathname.startsWith('/_next')
+    pathname.startsWith('/_next') ||
+    pathname.endsWith('.mjs') ||
+    pathname.endsWith('.js')
   ) {
     return NextResponse.next();
   }
@@ -42,6 +44,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|mjs|js)$).*)',
   ],
 };

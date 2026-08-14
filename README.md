@@ -6,7 +6,7 @@ An enterprise-grade, AI-powered application designed to analyze candidate resume
 
 ## Problem Statement
 
-Modern recruitment relies heavily on Applicant Tracking Systems (ATS) to filter job applications before they reach human recruiters. Qualified candidates are frequently rejected due to formatting discrepancies, missing keywords, or poor alignment with specific job postings. Manually customizing a resume for every application is time-consuming and often ineffective without analytical insights.
+Job seekers often apply to multiple jobs, each requiring a customized resume. Manually editing a resume for every application is repetitive, time-consuming, and increases the risk of overlooking important keywords that Applicant Tracking Systems (ATS) use to filter candidates.
 
 AI Resume Tailor solves this problem by giving job seekers immediate, data-driven feedback. By processing raw resume text alongside target job descriptions, the application highlights key skill alignments, flags missing industry terminology, and computes an objective compatibility score in seconds.
 

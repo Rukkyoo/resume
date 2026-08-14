@@ -18,7 +18,7 @@ export default async function SignUpPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-160px)] flex items-center justify-center py-12 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-160px)] bg-[#f1faee] flex items-center justify-center py-12 px-4 sm:px-6">
       <GoogleAuthCard mode="sign-up" />
     </div>
   );

@@ -1,8 +1,3 @@
-'use client';
-
-import * as pdfjsLib from 'pdfjs-dist';
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-
 /**
  * Extract raw text from a PDF File and log it.
  * Validates file type (PDF) and size (≤5 MB).
@@ -10,6 +5,10 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
  * The extracted text is logged and returned. No persistent storage is used.
  */
 export async function extractCVText(file: File): Promise<string> {
+    if (typeof window === 'undefined') {
+        throw new Error('PDF extraction can only be performed in the browser environment.');
+    }
+
     const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
     if (file.type && file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
         console.warn('[extractCVText] Non-PDF file provided:', file.name, file.type);
@@ -23,11 +22,15 @@ export async function extractCVText(file: File): Promise<string> {
     }
 
     if (file.size > MAX_SIZE) {
-        console.error('[extractCVText]  File size exceeds 5MB limit:', file.size);
+        console.error('[extractCVText] File size exceeds 5MB limit:', file.size);
         throw new Error('File exceeds the 5 MB size limit.');
     }
 
     try {
+        console.log('[extractCVText] Loading pdfjs-dist dynamically...');
+        const pdfjsLib = await import('pdfjs-dist');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+
         console.log('[extractCVText] Reading ArrayBuffer...');
         const arrayBuffer = await file.arrayBuffer();
         const pdfData = new Uint8Array(arrayBuffer);

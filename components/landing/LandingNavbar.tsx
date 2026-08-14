@@ -27,15 +27,15 @@ export function LandingNavbar() {
             className="flex items-center gap-2 font-bold text-base tracking-tight"
             style={{ color: '#1d3557', fontFamily: 'var(--font-display)' }}
           >
-            <span
+            {/* <span
               className="flex items-center justify-center w-8 h-8 rounded-lg text-sm font-black border border-[#1d3557] shadow-[2px_2px_0px_#1d3557]"
               style={{
                 background: '#e63946',
                 color: '#ffffff',
               }}
             >
-              R
-            </span>
+              Rez
+            </span> */}
             ResumeAI
           </Link>
 

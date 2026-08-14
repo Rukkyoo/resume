@@ -45,6 +45,69 @@ interface ResumeDetailModalProps {
   onSaveJobDescription?: (resumeId: string, updatedJd: string) => void;
 }
 
+function FormattedMarkdown({ content }: { content: string }) {
+  if (!content) return null;
+
+  let cleaned = content.replace(/\\n/g, '\n').replace(/\\"/g, '"');
+  if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+    cleaned = cleaned.slice(1, -1);
+  }
+
+  const lines = cleaned.split('\n');
+
+  return (
+    <div className="space-y-2.5 font-sans text-xs text-[#1d3557] leading-relaxed">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) return null;
+
+        if (trimmed.startsWith('## ') || trimmed.startsWith('### ') || trimmed.startsWith('# ')) {
+          const headingText = trimmed.replace(/^#+\s*/, '');
+          return (
+            <h4
+              key={idx}
+              className="font-bold text-sm text-[#1d3557] pt-2 pb-1 border-b border-[#1d3557]/15 flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#e63946]" />
+              {headingText}
+            </h4>
+          );
+        }
+
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s/.test(trimmed)) {
+          const bulletText = trimmed.replace(/^[-*\d.]+\s*/, '');
+          const parts = bulletText.split(/(\*\*.*?\*\*)/g);
+          return (
+            <div key={idx} className="flex items-start gap-2 pl-2 bg-white/80 p-2 rounded-lg border border-[#1d3557]/10">
+              <span className="text-[#e63946] font-bold text-xs mt-0.5">•</span>
+              <span className="flex-1">
+                {parts.map((part, pIdx) => {
+                  if (part.startsWith('**') && part.endsWith('**')) {
+                    return <strong key={pIdx} className="font-bold text-[#1d3557]">{part.slice(2, -2)}</strong>;
+                  }
+                  return part;
+                })}
+              </span>
+            </div>
+          );
+        }
+
+        const parts = trimmed.split(/(\*\*.*?\*\*)/g);
+        return (
+          <p key={idx} className="text-xs text-[#1d3557]/90 leading-normal">
+            {parts.map((part, pIdx) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={pIdx} className="font-bold text-[#1d3557]">{part.slice(2, -2)}</strong>;
+              }
+              return part;
+            })}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export function ResumeDetailModal({
   resume,
   isOpen,
@@ -270,8 +333,8 @@ export function ResumeDetailModal({
                           </p>
                         </div>
                       </div>
-                      <div className="bg-[#f8fdf6] border border-[#1d3557]/20 rounded-lg p-4 text-xs font-sans text-[#1d3557] whitespace-pre-wrap leading-relaxed max-h-[300px] overflow-y-auto">
-                        {resume.aiAnalysis}
+                      <div className="bg-[#f8fdf6] border border-[#1d3557]/20 rounded-lg p-4 text-xs font-sans text-[#1d3557] max-h-[320px] overflow-y-auto" data-lenis-prevent>
+                        <FormattedMarkdown content={resume.aiAnalysis} />
                       </div>
                     </div>
                   )}
@@ -329,9 +392,7 @@ export function ResumeDetailModal({
                                   {rec.category}
                                 </span>
                               </div>
-                              <p className="text-xs font-medium text-[#1d3557] leading-snug">
-                                {rec.text}
-                              </p>
+                              <FormattedMarkdown content={rec.text} />
                             </div>
                           </div>
                         ))}
